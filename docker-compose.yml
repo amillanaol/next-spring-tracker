@@ -11,11 +11,11 @@ services:
     environment:
       MONGO_INITDB_DATABASE: taskdb
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
+      test: ["CMD-SHELL", "mongosh --eval 'db.adminCommand(\"ping\")' --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   task-api:
     build:
