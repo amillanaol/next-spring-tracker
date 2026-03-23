@@ -97,11 +97,6 @@ pnpm-lock.yaml
 # Stylelint
 .stylelintcache
 
-### Docker ###
-Dockerfile*
-docker-compose*
-.docker/
-
 ### Configuracion local ###
 .env
 .env.local
