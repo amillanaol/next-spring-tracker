@@ -13,11 +13,11 @@ services:
     environment:
       MONGO_INITDB_DATABASE: taskdb
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/taskdb --quiet
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 10s
       retries: 5
-      start_period: 10s
+      start_period: 40s
 
   task-api:
     build:
