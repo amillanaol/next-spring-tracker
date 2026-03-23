@@ -46,7 +46,7 @@ Task Manager es una aplicacion fullstack para gestion de tareas personales con a
 | Estilos | Tailwind CSS | 3.x |
 | HTTP Client | Axios | 1.x |
 | Formularios | React Hook Form | 7.x |
-| Autenticacion | JWT (jjwt) | 0.9.1 |
+| Autenticacion | JWT (jjwt) | 0.11.5 |
 | Contenedores | Docker + Compose | multi-stage |
 | Orquestacion | Kubernetes | 1.28+ |
 | Build Frontend | npm | 10.x |
