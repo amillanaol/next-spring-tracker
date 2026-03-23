@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: ${MONGODB_HOST:-taskmanager_mongodb}
+    restart: unless-stopped
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_DATABASE: taskdb
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/taskdb --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  task-api:
+    build:
+      context: ./task-api
+      dockerfile: Dockerfile.dev
+    container_name: task-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8080}:8080"
+      - "${DEBUG_PORT:-5005}:5005"
+    environment:
+      MONGODB_URI: mongodb://mongodb:${MONGODB_PORT_INTERNAL:-27017}/taskdb
+      JWT_SECRET: ${JWT_SECRET:-supersecretkey123456789012345678901234567890}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      SERVER_PORT: 8080
+    volumes:
+      - ./task-api:/app
+      - maven_cache:/root/.m2
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  task-web:
+    build:
+      context: ./task-web
+      dockerfile: Dockerfile.dev
+    container_name: task-web
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:${API_PORT:-8080}
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - ./task-web:/app
+      - nextjs_cache:/app/.next
+    depends_on:
+      - task-api
+
+volumes:
+  mongodb_data:
+  maven_cache:
+  nextjs_cache:
