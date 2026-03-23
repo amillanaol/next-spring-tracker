@@ -1,0 +1,17 @@
+# Dockerfile para desarrollo local con hot reload
+FROM maven:3.9-eclipse-temurin-8
+
+WORKDIR /app
+
+# Instalar dependencias primero (capa cache)
+COPY pom.xml .
+RUN mvn dependency:go-offline -B || true
+
+# Copiar codigo fuente
+COPY src ./src
+
+# Puerto para debugging
+EXPOSE 5005
+
+# Comando para hot reload con devtools
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.fork=false"]
