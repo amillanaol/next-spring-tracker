@@ -11,7 +11,7 @@ help: ## Muestra esta ayuda
 
 up: ## Levanta todos los servicios en background
 	@echo "$(YELLOW)Starting services...$(NC)"
-	docker-compose up -d
+	docker compose up -d
 	@echo ""
 	@echo "$(GREEN)Services started:$(NC)"
 	@echo "  - MongoDB:  localhost:27017"
@@ -20,7 +20,7 @@ up: ## Levanta todos los servicios en background
 
 up-dev: ## Levanta servicios con hot reload y logs visibles
 	@echo "$(YELLOW)Starting services with hot reload...$(NC)"
-	docker-compose up
+	docker compose up
 	@echo ""
 	@echo "$(GREEN)Services started with hot reload:$(NC)"
 	@echo "  - MongoDB:  localhost:27017"
@@ -29,42 +29,42 @@ up-dev: ## Levanta servicios con hot reload y logs visibles
 
 down: ## Detiene todos los servicios
 	@echo "$(YELLOW)Stopping services...$(NC)"
-	docker-compose down
+	docker compose down
 
 logs: ## Muestra logs de todos los servicios
-	docker-compose logs -f
+	docker compose logs -f
 
 logs-api: ## Logs solo del API
-	docker-compose logs -f task-api
+	docker compose logs -f task-api
 
 logs-web: ## Logs solo del frontend
-	docker-compose logs -f task-web
+	docker compose logs -f task-web
 
 logs-mongo: ## Logs solo de MongoDB
-	docker-compose logs -f mongodb
+	docker compose logs -f mongodb
 
 rebuild: ## Reconstruye y levanta servicios
 	@echo "$(YELLOW)Rebuilding services...$(NC)"
-	docker-compose up -d --build
+	docker compose up -d --build
 
 build: ## Solo construye las imágenes
-	docker-compose build
+	docker compose build
 
 clean: ## Limpia contenedores, volúmenes y orphan images
 	@echo "$(YELLOW)Cleaning up...$(NC)"
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 	docker system prune -f
 
 restart: down up ## Reinicia todos los servicios
 
 ps: ## Muestra estado de servicios
-	docker-compose ps
+	docker compose ps
 
 mongo-shell: ## Entra al shell de MongoDB
 	docker exec -it taskmanager_mongodb mongosh taskdb
 
 mongo-logs: ## Logs de MongoDB
-	docker-compose logs -f mongodb
+	docker compose logs -f mongodb
 
 # Kubernetes
 k8s-apply: ## Aplica manifiestos de Kubernetes
