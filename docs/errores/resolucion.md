@@ -154,6 +154,17 @@ server.port=8081
 2. Seleccionar "Force Update of Snapshots/Releases"
 3. OK
 
+### Errors exist in required projects
+
+**Sintoma:** Errores de dependencias en Eclipse
+
+**Causa Raiz:** Maven no ha descargado las dependencias
+
+**Solucion Tecnica:**
+1. Project → Clean → Clean
+2. Project → Build Automatically (verificar que este activado)
+3. Click derecho → Maven → Update Project → OK
+
 ## Errores del Frontend (Next.js)
 
 ### sh: next: not found
