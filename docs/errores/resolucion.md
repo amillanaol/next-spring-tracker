@@ -30,33 +30,33 @@ cd ~/src/NextSpringTracker
 docker compose up -d
 ```
 
-### Container taskmanager_mongodb is unhealthy
+### Container taskmanager_postgres is unhealthy
 
-**Sintoma:** El contenedor de MongoDB no pasa el healthcheck
+**Sintoma:** El contenedor de PostgreSQL no pasa el healthcheck
 
-**Causa Raiz:** El healthcheck usa `mongosh` pero la sintaxis es incorrecta
+**Causa Raiz:** El healthcheck usa `pg_isready` pero puede fallar si PostgreSQL esta inicializando
 
 **Solucion Tecnica:**
 ```yaml
-# En docker-compose.yml, usar CMD-SHELL con sintaxis correcta:
+# En docker-compose.yml, el healthcheck ya esta configurado:
 healthcheck:
-  test: ["CMD-SHELL", "mongosh --eval 'db.adminCommand(\"ping\")' --quiet"]
+  test: ["CMD-SHELL", "pg_isready -U postgres"]
   interval: 5s
   timeout: 5s
-  retries: 10
-  start_period: 30s
+  retries: 5
+  start_period: 10s
 ```
 
-### dependency failed to start: mongodb
+### dependency failed to start: postgres
 
-**Sintoma:** Los otros contenedores no inician porque MongoDB no esta healthy
+**Sintoma:** Los otros contenedores no inician porque PostgreSQL no esta healthy
 
-**Causa Raiz:** Healthcheck de MongoDB fallando o red de Docker no funciona
+**Causa Raiz:** Healthcheck de PostgreSQL fallando o red de Docker no funciona
 
 **Solucion Tecnica:**
 ```bash
-# Ver logs de MongoDB
-docker logs taskmanager_mongodb
+# Ver logs de PostgreSQL
+docker logs taskmanager_postgres
 
 # En WSL, configurar DNS
 sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
@@ -199,36 +199,35 @@ docker compose up -d task-web
 
 ## Errores de Base de Datos
 
-### MongoDB connection refused
+### PostgreSQL connection refused
 
-**Sintoma:** Aplicacion no puede conectar a MongoDB
+**Sintoma:** Aplicacion no puede conectar a PostgreSQL
 
-**Causa Raiz:** MongoDB no esta corriendo o la URI es incorrecta
+**Causa Raiz:** PostgreSQL no esta corriendo o la URL JDBC es incorrecta
 
 **Solucion Tecnica:**
 ```bash
-# Verificar que MongoDB esta corriendo
-docker compose ps mongodb
+# Verificar que PostgreSQL esta corriendo
+docker compose ps postgres
 
 # Ver logs
-docker compose logs mongodb
+docker compose logs postgres
 
 # Reiniciar si es necesario
-docker compose restart mongodb
+docker compose restart postgres
 ```
 
-### MongoDB container starts but unhealthy
+### PostgreSQL container starts but unhealthy
 
-**Sintoma:** MongoDB corre pero el healthcheck falla
+**Sintoma:** PostgreSQL corre pero el healthcheck falla
 
-**Causa Raiz:** El comando de healthcheck usa `mongosh` pero `mongo` no existe
+**Causa Raiz:** PostgreSQL aun esta inicializando
 
 **Solucion Tecnica:**
 ```bash
-# Verificar que mongosh existe en el contenedor
-docker exec taskmanager_mongodb which mongosh
-
-# Actualizar healthcheck en docker-compose.yml
+# Esperar unos segundos y verificar
+sleep 10
+docker compose ps postgres
 ```
 
 ## Errores de Kubernetes
@@ -263,15 +262,15 @@ docker compose logs task-api
 make logs-web
 docker compose logs task-web
 
-# Logs de MongoDB
-make logs-mongo
-docker compose logs mongodb
+# Logs de PostgreSQL
+make logs-postgres
+docker compose logs postgres
 
-# Entrar a MongoDB shell
-make mongo-shell
+# Entrar a PostgreSQL shell
+make psql-shell
 
 # Reiniciar un servicio especifico
-docker compose restart mongodb
+docker compose restart postgres
 
 # Reconstruir todo desde cero
 docker compose down
