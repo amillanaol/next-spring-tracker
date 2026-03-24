@@ -21,7 +21,7 @@ docker compose up -d
 **NOTA:** Usar `docker compose` (con espacio), no `docker-compose` (con guion). Las versiones nuevas de Docker CLI integran compose como subcomando.
 
 Esto iniciara:
-- **MongoDB** en puerto 27017
+- **PostgreSQL** en puerto 5432
 - **task-api** en puerto 8080 (hot reload activo)
 - **task-web** en puerto 3000 (hot reload activo)
 
@@ -44,7 +44,7 @@ Abrir navegador en: http://localhost:3000
 Servicios disponibles:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8080
-- MongoDB: localhost:27017
+- PostgreSQL: localhost:5432
 
 ## Desarrollo con Eclipse IDE (Backend)
 
@@ -98,9 +98,9 @@ mvn dependency:resolve -U
 
 ### Ejecutar desde Eclipse
 
-1. Asegurarse de que MongoDB este corriendo:
+1. Asegurarse de que PostgreSQL este corriendo:
    ```bash
-   docker compose up -d mongodb
+   docker compose up -d postgres
    ```
 
 2. En Eclipse: **Run → Run As → Spring Boot App**
@@ -190,16 +190,16 @@ curl http://localhost:8080/api/auth/login
 
 Deberia retornar `401 Unauthorized` (esto es correcto, significa que el API esta funcionando).
 
-## Acceder a MongoDB
+## Acceder a PostgreSQL
 
 ```bash
-make mongo-shell
+make psql-shell
 ```
 
 O usando Docker directamente:
 
 ```bash
-docker exec -it taskmanager_mongodb mongosh taskdb
+docker exec -it taskmanager_postgres psql -U postgres -d taskdb
 ```
 
 ## Solucionar Problemas Comunes
@@ -219,13 +219,12 @@ docker compose build --no-cache task-web
 docker compose up -d task-web
 ```
 
-### MongoDB container unhealthy
+### PostgreSQL no esta healthy
 
-Verificar que el healthcheck usa `mongosh` (no `mongo`):
+Verificar logs y configuracion de red:
 
-```yaml
-healthcheck:
-  test: ["CMD-SHELL", "mongosh --eval 'db.adminCommand(\"ping\")' --quiet"]
+```bash
+docker compose logs postgres
 ```
 
 ### Puerto ya en uso
