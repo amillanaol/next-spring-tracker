@@ -3,12 +3,9 @@ package com.taskmanager.controller;
 import com.taskmanager.dto.TaskRequest;
 import com.taskmanager.dto.TaskResponse;
 import com.taskmanager.model.User;
-import com.taskmanager.repository.UserRepository;
 import com.taskmanager.security.UserDetailsServiceImpl;
 import com.taskmanager.service.TaskService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +35,7 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskResponse>> getAllTasks() {
-        String userId = getCurrentUserId();
+        Long userId = getCurrentUserId();
         List<TaskResponse> tasks = taskService.findAllByUserId(userId);
         return ResponseEntity.ok(tasks);
     }
@@ -46,7 +43,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<?> createTask(@RequestBody TaskRequest request) {
         try {
-            String userId = getCurrentUserId();
+            Long userId = getCurrentUserId();
             TaskResponse task = taskService.create(request, userId);
             return ResponseEntity.ok(task);
         } catch (Exception e) {
@@ -57,9 +54,9 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTask(@PathVariable String id, @RequestBody TaskRequest request) {
+    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
         try {
-            String userId = getCurrentUserId();
+            Long userId = getCurrentUserId();
             TaskResponse task = taskService.update(id, request, userId);
             return ResponseEntity.ok(task);
         } catch (RuntimeException e) {
@@ -70,9 +67,9 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTask(@PathVariable String id) {
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         try {
-            String userId = getCurrentUserId();
+            Long userId = getCurrentUserId();
             taskService.delete(id, userId);
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
@@ -82,8 +79,9 @@ public class TaskController {
         }
     }
 
-    private String getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    private Long getCurrentUserId() {
+        org.springframework.security.core.Authentication authentication = 
+            org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = userDetailsService.getUserByEmail(email);
         return user.getId();
