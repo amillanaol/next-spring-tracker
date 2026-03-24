@@ -6,13 +6,13 @@ Documentacion del sistema de autenticacion JWT.
 
 ```
 1. Registro
-   Cliente -> POST /api/auth/register -> Server -> BCrypt(password) -> MongoDB
+   Cliente -> POST /api/auth/register -> Server -> BCrypt(password) -> PostgreSQL
                                                          |
                                                          v
                                               JWT Token <-
 
 2. Login
-   Cliente -> POST /api/auth/login -> Server -> BCrypt(verify) -> MongoDB
+   Cliente -> POST /api/auth/login -> Server -> BCrypt(verify) -> PostgreSQL
                                                          |
                                                          v
                                               JWT Token <-
