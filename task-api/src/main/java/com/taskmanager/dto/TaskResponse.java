@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TaskResponse {
 
-    private String id;
+    private Long id;
     private String title;
     private String description;
     private TaskStatus status;
-    private String userId;
+    private Long userId;
     private String createdAt;
 }
