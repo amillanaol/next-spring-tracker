@@ -13,11 +13,11 @@ public class AuthResponse {
 
     private String token;
     private String type;
-    private String id;
+    private Long id;
     private String name;
     private String email;
 
-    public static AuthResponse of(String token, String id, String name, String email) {
+    public static AuthResponse of(String token, Long id, String name, String email) {
         return AuthResponse.builder()
                 .token(token)
                 .type("Bearer")
