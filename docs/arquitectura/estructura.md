@@ -8,7 +8,7 @@ El proyecto sigue una arquitectura cliente-servidor clasica con:
 
 - **Frontend**: SPA con Next.js 14 (App Router)
 - **Backend**: API REST con Spring Boot 2.7
-- **Base de datos**: MongoDB (documentos)
+- **Base de datos**: PostgreSQL 15 (relacional)
 - **Autenticacion**: JWT (stateless)
 
 ## Arquitectura Backend (task-api)
@@ -25,11 +25,11 @@ task-api/src/main/java/com/taskmanager/
     AuthService.java
     TaskService.java
 
-  repository/        # Acceso a datos
+  repository/        # Acceso a datos JPA
     UserRepository.java
     TaskRepository.java
 
-  model/             # Entidades JPA/MongoDB
+  model/             # Entidades JPA
     User.java
     Task.java
     TaskStatus.java
@@ -66,10 +66,10 @@ Spring Boot (Backend)
     |
     +---> Service (logica de negocio)
     |
-    +---> Repository (acceso a datos)
+    +---> Repository (acceso a datos JPA)
     |
     v
-MongoDB
+PostgreSQL
 ```
 
 ## Arquitectura Frontend (task-web)
@@ -115,11 +115,11 @@ task-web/
 
 ```json
 {
-  "id": "string (MongoDB ObjectId)",
+  "id": 1,
   "name": "string",
   "email": "string (unico)",
   "password": "string (bcrypt hash)",
-  "createdAt": "string (ISO datetime)"
+  "createdAt": "2024-03-15T10:00:00"
 }
 ```
 
@@ -127,12 +127,12 @@ task-web/
 
 ```json
 {
-  "id": "string (MongoDB ObjectId)",
+  "id": 1,
   "title": "string",
   "description": "string",
   "status": "PENDING | IN_PROGRESS | DONE",
-  "userId": "string (ref: User.id)",
-  "createdAt": "string (ISO datetime)"
+  "userId": 1,
+  "createdAt": "2024-03-15T10:00:00"
 }
 ```
 
@@ -140,7 +140,7 @@ task-web/
 
 | Patron | Ubicacion | Descripcion |
 | :--- | :--- | :--- |
-| Repository | task-api/repository | Abstraccion de acceso a datos |
+| Repository | task-api/repository | Abstraccion de acceso a datos JPA |
 | Service Layer | task-api/service | Logica de negocio |
 | DTO | task-api/dto | Transferencia de datos API |
 | Singleton | Frontend lib/* | Instancias compartidas |
@@ -152,10 +152,10 @@ Cada usuario solo ve sus propias tareas:
 
 ```java
 // TaskRepository.java
-List<Task> findByUserIdOrderByCreatedAtDesc(String userId);
+List<Task> findByUserIdOrderByCreatedAtDesc(Long userId);
 
 // TaskController.java extrae userId del JWT
-String userId = getCurrentUserId();
+Long userId = getCurrentUserId();
 List<TaskResponse> tasks = taskService.findAllByUserId(userId);
 ```
 
