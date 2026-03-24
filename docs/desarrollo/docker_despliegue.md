@@ -6,23 +6,26 @@ Configuracion y comandos para ejecutar el proyecto con Docker Compose.
 
 El archivo `docker-compose.yml` define tres servicios:
 
-### MongoDB
+### PostgreSQL
 
 ```yaml
-mongodb:
-  image: mongo:6.0
+postgres:
+  image: postgres:15-alpine
   ports:
-    - "27017:27017"
+    - "5432:5432"
   volumes:
-    - mongodb_data:/data/db
-    - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    - postgres_data:/var/lib/postgresql/data
+  environment:
+    POSTGRES_DB: taskdb
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
   healthcheck:
-    test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/taskdb --quiet
+    test: ["CMD-SHELL", "pg_isready -U postgres"]
 ```
 
-- Puerto: 27017
-- Volumen persistente: `mongodb_data`
-- Script de inicializacion: `mongo-init.js`
+- Puerto: 5432
+- Volumen persistente: `postgres_data`
+- Base de datos: `taskdb`
 
 ### task-api (Backend)
 
@@ -34,11 +37,13 @@ task-api:
   ports:
     - "8080:8080"
   environment:
-    MONGODB_URI: mongodb://mongodb:27017/taskdb
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/taskdb
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: postgres
     JWT_SECRET: ${JWT_SECRET:-supersecretkey123456789012345678901234567890}
     JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
   depends_on:
-    mongodb:
+    postgres:
       condition: service_healthy
 ```
 
@@ -80,7 +85,7 @@ docker-compose logs -f
 # Solo un servicio
 docker-compose logs -f task-api
 docker-compose logs -f task-web
-docker-compose logs -f mongodb
+docker-compose logs -f postgres
 ```
 
 ### Reconstruir imagenes
@@ -157,8 +162,8 @@ curl -X POST http://localhost:8080/api/auth/login \
 ### 4. Verificar base de datos
 
 ```bash
-docker exec taskmanager_mongodb mongosh --eval "db.users.find()" taskdb
-docker exec taskmanager_mongodb mongosh --eval "db.tasks.find()" taskdb
+docker exec taskmanager_postgres psql -U postgres -d taskdb -c "SELECT * FROM users;"
+docker exec taskmanager_postgres psql -U postgres -d taskdb -c "SELECT * FROM tasks;"
 ```
 
 ## Troubleshooting
@@ -169,20 +174,20 @@ docker exec taskmanager_mongodb mongosh --eval "db.tasks.find()" taskdb
 # Ver logs detallados
 docker-compose logs task-api
 
-# Verificar que MongoDB esta healthy
-docker-compose ps mongodb
+# Verificar que PostgreSQL esta healthy
+docker-compose ps postgres
 ```
 
 ### Frontend no conecta al API
 
 Verificar que `NEXT_PUBLIC_API_URL` apunta a `http://localhost:8080`.
 
-### MongoDB no esta healthy
+### PostgreSQL no esta healthy
 
 ```bash
-# Ver logs de MongoDB
-docker-compose logs mongodb
+# Ver logs de PostgreSQL
+docker-compose logs postgres
 
-# Verificar que el puerto 27017 no esta en uso
-lsof -i :27017
+# Verificar que el puerto 5432 no esta en uso
+lsof -i :5432
 ```
