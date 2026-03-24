@@ -16,7 +16,7 @@ k8s/
 │   ├── deployment.yaml    # Deployment del API
 │   ├── service.yaml       # Service ClusterIP
 │   ├── hpa.yaml          # Auto-scaling
-│   └── secret.yaml       # Secrets (JWT, MongoDB)
+│   └── secret.yaml       # Secrets (JWT, PostgreSQL)
 ├── task-web/
 │   ├── deployment.yaml    # Deployment del frontend
 │   └── service.yaml       # Service ClusterIP
@@ -61,11 +61,11 @@ spec:
 
 ## Despliegue
 
-### 1. Desplegar MongoDB (si no existe)
+### 1. Desplegar PostgreSQL (si no existe)
 
 ```bash
-# Usar Helm o operador de MongoDB
-helm install mongodb bitnami/mongodb --namespace default
+# Usar Helm o operador de PostgreSQL
+helm install postgresql bitnami/postgresql --namespace default
 ```
 
 ### 2. Aplicar manifiestos
