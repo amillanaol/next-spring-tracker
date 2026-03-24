@@ -6,7 +6,7 @@ Configuracion de variables de entorno para el proyecto.
 
 | Variable | Descripcion | Valor por defecto |
 | :--- | :--- | :--- |
-| MONGODB_PORT | Puerto de MongoDB | 27017 |
+| POSTGRES_PORT | Puerto de PostgreSQL | 5432 |
 | API_PORT | Puerto del Backend API | 8080 |
 | WEB_PORT | Puerto del Frontend | 3000 |
 | DEBUG_PORT | Puerto de Debug (JVM) | 5005 |
@@ -15,7 +15,7 @@ Configuracion de variables de entorno para el proyecto.
 
 ```env
 # Cambiar puertos si hay conflictos
-MONGODB_PORT=27018
+POSTGRES_PORT=5433
 API_PORT=8081
 WEB_PORT=3001
 DEBUG_PORT=5006
@@ -28,8 +28,8 @@ JWT_EXPIRATION_MS=86400000
 ### .env.example
 
 ```env
-# Puerto de MongoDB
-MONGODB_PORT=27017
+# Puerto de PostgreSQL
+POSTGRES_PORT=5432
 
 # Puerto del Backend API
 API_PORT=8080
@@ -49,7 +49,9 @@ JWT_EXPIRATION_MS=86400000
 
 | Variable | Descripcion | Valor por defecto |
 | :--- | :--- | :--- |
-| MONGODB_URI | URI de conexion a MongoDB | mongodb://mongodb:27017/taskdb |
+| SPRING_DATASOURCE_URL | JDBC URL de PostgreSQL | jdbc:postgresql://postgres:5432/taskdb |
+| SPRING_DATASOURCE_USERNAME | Usuario de PostgreSQL | postgres |
+| SPRING_DATASOURCE_PASSWORD | Password de PostgreSQL | postgres |
 | JWT_SECRET | Clave secreta para firmar JWT (min 32 chars) | - |
 | JWT_EXPIRATION_MS | Tiempo de expiracion del token en ms | 86400000 (24h) |
 | SERVER_PORT | Puerto interno del servidor | 8080 |
@@ -89,7 +91,7 @@ openssl rand -base64 32
 
 ```env
 # Puertos
-MONGODB_PORT=27017
+POSTGRES_PORT=5432
 API_PORT=8080
 WEB_PORT=3000
 
@@ -105,8 +107,8 @@ NEXT_PUBLIC_API_URL=https://api.tudominio.com
 
 ```bash
 # Ver variables de entorno del contenedor
-docker exec task-api env | grep -E "MONGODB|JWT"
+docker exec task-api env | grep -E "POSTGRES|JWT"
 
 # Ver contenedores y puertos activos
-docker-compose ps
+docker compose ps
 ```
