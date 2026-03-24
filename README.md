@@ -21,7 +21,7 @@ tags: MOCs
 
 ## Descripcion
 
-Task Manager es una aplicacion fullstack para gestion de tareas personales con autenticacion JWT. Implementada con Next.js 14 (frontend) y Spring Boot 2.7 (backend), conectada a MongoDB. Sigue arquitectura REST con comunicacion stateless y esta containerizada para desarrollo local con Docker Compose y preparada para despliegues en Kubernetes.
+Task Manager es una aplicacion fullstack para gestion de tareas personales con autenticacion JWT. Implementada con Next.js 14 (frontend) y Spring Boot 2.7 (backend), conectada a PostgreSQL 15. Sigue arquitectura REST con comunicacion stateless y esta containerizada para desarrollo local con Docker Compose y preparada para despliegues en Kubernetes.
 
 ## Indice de la documentacion
 
@@ -42,7 +42,7 @@ Task Manager es una aplicacion fullstack para gestion de tareas personales con a
 | :--- | :--- | :--- |
 | Frontend | Next.js + React | 14.2 / 18 |
 | Backend | Spring Boot + Java | 2.7 / 8 |
-| Base de datos | MongoDB | 6.0 |
+| Base de datos | PostgreSQL | 15 |
 | Estilos | Tailwind CSS | 3.x |
 | HTTP Client | Axios | 1.x |
 | Formularios | React Hook Form | 7.x |
@@ -60,8 +60,8 @@ NextSpringTracker/
     src/main/java/com/taskmanager/
       controller/        # REST Controllers (Auth, Task)
       service/           # Logica de negocio
-      repository/        # Acceso a datos MongoDB
-      model/             # Entidades (User, Task, TaskStatus)
+      repository/        # Acceso a datos JPA
+      model/             # Entidades JPA (User, Task, TaskStatus)
       dto/               # Data Transfer Objects
       security/          # JWT, Filtros, Configuracion
     Dockerfile           # Multi-stage build (produccion)
@@ -105,7 +105,7 @@ make ps
 Servicios disponibles:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8080
-- MongoDB: localhost:27017
+- PostgreSQL: localhost:5432
 
 ## Ejecucion de Tests
 
