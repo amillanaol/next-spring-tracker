@@ -80,7 +80,7 @@ Respuesta esperada:
 {
   "token": "eyJhbGciOiJIUzUxMiJ9...",
   "type": "Bearer",
-  "id": "65f...",
+  "id": 1,
   "name": "Test User",
   "email": "test@example.com"
 }
