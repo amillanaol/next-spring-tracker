@@ -1,17 +1,17 @@
 export type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'DONE';
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
 }
 
 export interface Task {
-  id: string;
+  id: number;
   title: string;
   description: string;
   status: TaskStatus;
-  userId: string;
+  userId: number;
   createdAt: string;
 }
 
@@ -24,7 +24,7 @@ export interface TaskFormData {
 export interface AuthResponse {
   token: string;
   type: string;
-  id: string;
+  id: number;
   name: string;
   email: string;
 }
