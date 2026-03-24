@@ -7,7 +7,6 @@ import com.taskmanager.model.TaskStatus;
 import com.taskmanager.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,27 +20,26 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<TaskResponse> findAllByUserId(String userId) {
+    public List<TaskResponse> findAllByUserId(Long userId) {
         return taskRepository.findByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public TaskResponse create(TaskRequest request, String userId) {
+    public TaskResponse create(TaskRequest request, Long userId) {
         Task task = Task.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .status(request.getStatus() != null ? request.getStatus() : TaskStatus.PENDING)
                 .userId(userId)
-                .createdAt(getCurrentTimestamp())
                 .build();
 
         task = taskRepository.save(task);
         return toResponse(task);
     }
 
-    public TaskResponse update(String id, TaskRequest request, String userId) {
+    public TaskResponse update(Long id, TaskRequest request, Long userId) {
         Task task = taskRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
@@ -55,7 +53,7 @@ public class TaskService {
         return toResponse(task);
     }
 
-    public void delete(String id, String userId) {
+    public void delete(Long id, Long userId) {
         if (!taskRepository.findByIdAndUserId(id, userId).isPresent()) {
             throw new RuntimeException("Task not found");
         }
@@ -69,11 +67,7 @@ public class TaskService {
                 .description(task.getDescription())
                 .status(task.getStatus())
                 .userId(task.getUserId())
-                .createdAt(task.getCreatedAt())
+                .createdAt(task.getCreatedAt() != null ? task.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : null)
                 .build();
-    }
-
-    private String getCurrentTimestamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

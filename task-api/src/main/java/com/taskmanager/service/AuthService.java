@@ -12,9 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Service
 public class AuthService {
 
@@ -40,7 +37,6 @@ public class AuthService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .createdAt(getCurrentTimestamp())
                 .build();
 
         user = userRepository.save(user);
@@ -59,9 +55,5 @@ public class AuthService {
 
         String token = jwtUtils.generateToken(user.getEmail());
         return AuthResponse.of(token, user.getId(), user.getName(), user.getEmail());
-    }
-
-    private String getCurrentTimestamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }
