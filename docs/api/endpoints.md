@@ -30,7 +30,7 @@ Registra un nuevo usuario.
 {
   "token": "eyJhbGciOiJIUzUxMiJ9...",
   "type": "Bearer",
-  "id": "65f1a2b3c4d5e6f7a8b9c0d1",
+  "id": 1,
   "name": "Juan Perez",
   "email": "juan@example.com"
 }
@@ -63,7 +63,7 @@ Inicia sesion y retorna JWT.
 {
   "token": "eyJhbGciOiJIUzUxMiJ9...",
   "type": "Bearer",
-  "id": "65f1a2b3c4d5e6f7a8b9c0d1",
+  "id": 1,
   "name": "Juan Perez",
   "email": "juan@example.com"
 }
@@ -97,19 +97,19 @@ Lista todas las tareas del usuario autenticado.
 ```json
 [
   {
-    "id": "65f1a2b3c4d5e6f7a8b9c0d2",
+    "id": 1,
     "title": "Terminar informe",
     "description": "Completar el informe mensual",
     "status": "IN_PROGRESS",
-    "userId": "65f1a2b3c4d5e6f7a8b9c0d1",
+    "userId": 1,
     "createdAt": "2024-03-15T10:30:00"
   },
   {
-    "id": "65f1a2b3c4d5e6f7a8b9c0d3",
-    "title": "Reunión con equipo",
+    "id": 2,
+    "title": "Reunion con equipo",
     "description": null,
     "status": "PENDING",
-    "userId": "65f1a2b3c4d5e6f7a8b9c0d1",
+    "userId": 1,
     "createdAt": "2024-03-15T09:00:00"
   }
 ]
@@ -137,11 +137,11 @@ Crea una nueva tarea.
 
 ```json
 {
-  "id": "65f1a2b3c4d5e6f7a8b9c0d4",
+  "id": 3,
   "title": "Nueva tarea",
   "description": "Descripcion opcional",
   "status": "PENDING",
-  "userId": "65f1a2b3c4d5e6f7a8b9c0d1",
+  "userId": 1,
   "createdAt": "2024-03-15T11:00:00"
 }
 ```
@@ -166,11 +166,11 @@ Actualiza una tarea existente.
 
 ```json
 {
-  "id": "65f1a2b3c4d5e6f7a8b9c0d4",
+  "id": 3,
   "title": "Tarea actualizada",
   "description": "Nueva descripcion",
   "status": "DONE",
-  "userId": "65f1a2b3c4d5e6f7a8b9c0d1",
+  "userId": 1,
   "createdAt": "2024-03-15T11:00:00"
 }
 ```
