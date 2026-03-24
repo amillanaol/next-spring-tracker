@@ -14,18 +14,18 @@ up: ## Levanta todos los servicios en background
 	docker compose up -d
 	@echo ""
 	@echo "$(GREEN)Services started:$(NC)"
-	@echo "  - MongoDB:  localhost:27017"
-	@echo "  - task-api: localhost:8080"
-	@echo "  - task-web: localhost:3000"
+	@echo "  - PostgreSQL: localhost:5432"
+	@echo "  - task-api:   localhost:8080"
+	@echo "  - task-web:   localhost:3000"
 
 up-dev: ## Levanta servicios con hot reload y logs visibles
 	@echo "$(YELLOW)Starting services with hot reload...$(NC)"
 	docker compose up
 	@echo ""
 	@echo "$(GREEN)Services started with hot reload:$(NC)"
-	@echo "  - MongoDB:  localhost:27017"
-	@echo "  - task-api: localhost:8080 (hot reload)"
-	@echo "  - task-web: localhost:3000 (hot reload)"
+	@echo "  - PostgreSQL: localhost:5432"
+	@echo "  - task-api:   localhost:8080 (hot reload)"
+	@echo "  - task-web:   localhost:3000 (hot reload)"
 
 down: ## Detiene todos los servicios
 	@echo "$(YELLOW)Stopping services...$(NC)"
@@ -40,8 +40,8 @@ logs-api: ## Logs solo del API
 logs-web: ## Logs solo del frontend
 	docker compose logs -f task-web
 
-logs-mongo: ## Logs solo de MongoDB
-	docker compose logs -f mongodb
+logs-postgres: ## Logs solo de PostgreSQL
+	docker compose logs -f postgres
 
 rebuild: ## Reconstruye y levanta servicios
 	@echo "$(YELLOW)Rebuilding services...$(NC)"
@@ -60,11 +60,11 @@ restart: down up ## Reinicia todos los servicios
 ps: ## Muestra estado de servicios
 	docker compose ps
 
-mongo-shell: ## Entra al shell de MongoDB
-	docker exec -it taskmanager_mongodb mongosh taskdb
+psql-shell: ## Entra al shell de PostgreSQL
+	docker exec -it taskmanager_postgres psql -U postgres -d taskdb
 
-mongo-logs: ## Logs de MongoDB
-	docker compose logs -f mongodb
+psql-logs: ## Logs de PostgreSQL
+	docker compose logs -f postgres
 
 # Kubernetes
 k8s-apply: ## Aplica manifiestos de Kubernetes
@@ -74,7 +74,7 @@ k8s-delete: ## Elimina recursos de Kubernetes
 	kubectl delete -f k8s/
 
 # Desarrollo local (sin Docker)
-dev-api: ## Levanta API localmente (requiere MongoDB corriendo)
+dev-api: ## Levanta API localmente (requiere PostgreSQL corriendo)
 	cd task-api && mvn spring-boot:run
 
 dev-web: ## Levanta frontend localmente

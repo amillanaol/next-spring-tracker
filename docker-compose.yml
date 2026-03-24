@@ -1,21 +1,22 @@
 services:
-  mongodb:
-    image: mongo:6.0
-    container_name: ${MONGODB_HOST:-taskmanager_mongodb}
+  postgres:
+    image: postgres:15-alpine
+    container_name: ${POSTGRES_HOST:-taskmanager_postgres}
     restart: unless-stopped
     ports:
-      - "${MONGODB_PORT:-27017}:27017"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - mongodb_data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      MONGO_INITDB_DATABASE: taskdb
+      POSTGRES_DB: taskdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ["CMD-SHELL", "mongosh --eval 'db.adminCommand(\"ping\")' --quiet"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 10
-      start_period: 30s
+      retries: 5
+      start_period: 10s
 
   task-api:
     build:
@@ -27,7 +28,9 @@ services:
       - "${API_PORT:-8080}:8080"
       - "${DEBUG_PORT:-5005}:5005"
     environment:
-      MONGODB_URI: mongodb://mongodb:${MONGODB_PORT_INTERNAL:-27017}/taskdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:${POSTGRES_PORT_INTERNAL:-5432}/taskdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
       JWT_SECRET: ${JWT_SECRET:-supersecretkey123456789012345678901234567890}
       JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
       SERVER_PORT: 8080
@@ -35,7 +38,7 @@ services:
       - ./task-api:/app
       - maven_cache:/root/.m2
     depends_on:
-      mongodb:
+      postgres:
         condition: service_healthy
 
   task-web:
@@ -57,6 +60,6 @@ services:
       - task-api
 
 volumes:
-  mongodb_data:
+  postgres_data:
   maven_cache:
   nextjs_cache:
