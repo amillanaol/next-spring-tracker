@@ -1,7 +1,3 @@
----
-tags: MOCs
----
-
 # Task Manager
 
 > Aplicacion web fullstack para gestion de tareas con autenticacion JWT.
