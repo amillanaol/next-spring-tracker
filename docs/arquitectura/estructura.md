@@ -51,27 +51,7 @@ task-api/src/main/java/com/taskmanager/
 
 ### Flujo de una peticion
 
-```
-Cliente (Browser)
-    |
-    v
-Next.js (Frontend) --> Axios (con JWT)
-    |
-    v
-Spring Boot (Backend)
-    |
-    +---> JwtAuthFilter (valida token)
-    |
-    +---> Controller (recibe peticion)
-    |
-    +---> Service (logica de negocio)
-    |
-    +---> Repository (acceso a datos JPA)
-    |
-    v
-PostgreSQL
-```
-
+![[Pasted image 20260325130457.png]]
 ## Arquitectura Frontend (task-web)
 
 ### Estructura de carpetas
@@ -100,14 +80,7 @@ task-web/
 
 ### Flujo de autenticacion
 
-```
-1. Usuario abre /login
-2. Formulario -> POST /api/auth/login
-3. Backend retorna JWT
-4. Frontend guarda token en localStorage
-5. Axios interceptor agrega "Authorization: Bearer <token>"
-6. Redirect a /tasks
-```
+![[Pasted image 20260325131344.png]]
 
 ## Modelo de datos
 
