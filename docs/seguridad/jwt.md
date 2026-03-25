@@ -4,22 +4,7 @@ Documentacion del sistema de autenticacion JWT.
 
 ## Flujo de Autenticacion
 
-```
-1. Registro
-   Cliente -> POST /api/auth/register -> Server -> BCrypt(password) -> PostgreSQL
-                                                         |
-                                                         v
-                                              JWT Token <-
-
-2. Login
-   Cliente -> POST /api/auth/login -> Server -> BCrypt(verify) -> PostgreSQL
-                                                         |
-                                                         v
-                                              JWT Token <-
-
-3. Peticiones Protegidas
-   Cliente -> Request + Bearer Token -> JwtAuthFilter -> validate -> Controller
-```
+![[Pasted image 20260325125756.png]]
 
 ## Implementacion Backend
 
