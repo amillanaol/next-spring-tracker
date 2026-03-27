@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+title: "next-spring-tracker"
+authors:
+  - family-names: "Millanao Lepileo"
+    given-names: "Alexis E."
+    orcid: "https://orcid.org/0009-0003-1768-7048"
+date-released: 2026-03-25
+version: "0.23.9"
