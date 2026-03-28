@@ -13,6 +13,12 @@
 
 **[Getting started](#inicio-rapido) | [Arquitectura](#arquitectura) | [API](#api) | [Despliegue](#despliegue) | [Documentacion](#documentacion)**
 
+<div align="center">
+    <img src="https://github.com/amillanaol/next-spring-tracker/blob/main/docs/arquitectura/Adjuntos/autenticacion-aislamiento_datos.png"
+        alt="autenticacion-aislamiento_datos"
+        width="700" />
+</div>
+
 </div>
 
 ## Descripcion

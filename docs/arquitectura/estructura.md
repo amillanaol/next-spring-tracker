@@ -86,12 +86,6 @@ task-web/
 ### Flujo de autenticacion
 
 <div align="center">
-    <img src="https://github.com/amillanaol/next-spring-tracker/blob/main/docs/arquitectura/Adjuntos/autenticacion-aislamiento_datos.png"
-        alt="autenticacion-aislamiento_datos"
-        width="700" />
-</div>
-
-<div align="center">
     <img src="https://github.com/amillanaol/next-spring-tracker/blob/main/docs/arquitectura/Adjuntos/request_flow-autenticacion_jwt.png"
         alt="request_flow-autenticacion_jwt"
         width="700" />
