@@ -51,7 +51,12 @@ task-api/src/main/java/com/taskmanager/
 
 ### Flujo de una peticion
 
-![[Pasted image 20260325130457.png]]
+<div align="center">
+    <img src="https://github.com/amillanaol/next-spring-tracker/blob/main/docs/arquitectura/Adjuntos/flujo_peticion.cliente_db.png"
+        alt="flujo_peticion.cliente_db"
+        width="700" />
+</div>
+
 ## Arquitectura Frontend (task-web)
 
 ### Estructura de carpetas
@@ -80,7 +85,17 @@ task-web/
 
 ### Flujo de autenticacion
 
-![[Pasted image 20260325131344.png]]
+<div align="center">
+    <img src="https://github.com/amillanaol/next-spring-tracker/blob/main/docs/arquitectura/Adjuntos/autenticacion-aislamiento_datos.png"
+        alt="autenticacion-aislamiento_datos"
+        width="700" />
+</div>
+
+<div align="center">
+    <img src="https://github.com/amillanaol/next-spring-tracker/blob/main/docs/arquitectura/Adjuntos/request_flow-autenticacion_jwt.png"
+        alt="request_flow-autenticacion_jwt"
+        width="700" />
+</div>
 
 ## Modelo de datos
 
